@@ -1,9 +1,23 @@
 const request = require("request");
 const $ = require("cheerio");
 const cheerio = require("cheerio");
+require('../utils/checkGradingAgency')
 
 let totalTitleArray = [];
 let totalPriceArray = [];
+let pokeArray = [];
+
+function allPokes() {
+    for(let i = 0; i < pokemon.all().length; i++) {
+        if(pokemon.all()[i]){
+        const pokeObj = {
+            pokemon: pokemon.all()[i],
+            number: i+1
+        }
+        pokeArray.push(pokeObj)};
+    }
+}
+allPokes();
 
 const getSingleCardsFromDACardWorld = (i) => {
   request(
@@ -28,12 +42,20 @@ const getSingleCardsFromDACardWorld = (i) => {
         }
 
         for (let i = 0; i < titleArray.length && i < newPricingArray.length; i++) {
-          console.log(titleArray[i], newPricingArray[i], " + ", i);
-          totalTitleArray.push(titleArray[i]);
-          totalPriceArray.push(newPricingArray[i])
+        //   console.log(titleArray[i], newPricingArray[i], " + ", i);
+        //   totalTitleArray.push(titleArray[i]);
+        //   totalPriceArray.push(newPricingArray[i])
+
           const cardObj = {
-            title: titleArray[i],
-            price: pricingArray[i],
+            set: '',
+            name: checkPokeName(titleArray[i]),
+            setNumber: '',
+            gradingAgency: checkGradingAgency(titleArray[i]),
+            pokemon: '',
+            suggestedPrice: '',
+            price: '',
+            shadowless: checkShadowless(titleArray[i]),
+            gemMint: checkGemMint(titleArray[i]),
           };
         }
       }
