@@ -6,7 +6,7 @@ let myArray = [];
 
 function getSetNames() {
   for (let i = 0; i < CARD_SETS.length; i++) {
-    console.log(CARD_SETS[i].name);
+    // console.log(CARD_SETS[i].name);
     myArray.push(CARD_SETS[i].name);
   }
 }

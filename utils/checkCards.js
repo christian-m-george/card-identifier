@@ -3,30 +3,32 @@ import CARD_SETS from "../sets/CardSets.js";
 
 const checkCard = {
   checkAgency: function checkGradingAgency(input) {
-    //   console.log('fn')
-    //   console.log(input.toLowerCase())
     if (input.toUpperCase().includes("PSA")) {
-      // console.log("PSA")
       return "PSA";
     } else if (input.toUpperCase().includes("BGS")) {
-      // console.log("BGS")
       return "BGS";
     } else if (input.toUpperCase().includes("CGC")) {
-      // console.log("CGC")
       return "CGC";
     } else {
-      // console.log("NO GRADE")
       return "NO GRADE";
     }
   },
 
   checkSet: function checkCardSet(input) {
+    console.log('------------>', input)
+    let myResult;
     for (let i = 0; i < CARD_SETS.length; i++) {
       let myInput = input.toLowerCase();
-      if (myInput.includes(CARD_SETS[i].name.trim().toLowerCase())) {
+      if (myInput.includes(`${CARD_SETS[i].name.trim().toLowerCase()} `)) {
         //   console.log('returning and exiting')
-        return CARD_SETS[i].name;
+        myResult = CARD_SETS[i].name;
       }
+    }
+    if (myResult) {
+      return myResult
+    }
+    else {
+      return "SET NOT FOUND"
     }
   },
 
@@ -36,17 +38,20 @@ const checkCard = {
     return match;
   },
 
-  checkMint: function checkGemMint(input) {
+  checkMint: function checkCardMint(input) {
     if (
       input.toLowerCase().includes(" gm ") ||
       input.toLowerCase().includes("gemmint") || 
       input.toLowerCase().includes("gem mint") 
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  },
+    ) return "GEM MINT";
+    else if (
+      input.toLowerCase().includes(" nm ") ||
+      input.toLowerCase().includes("near mint") || 
+      input.toLowerCase().includes("nearmint") 
+    ) 
+      return "NEAR MINT";
+    else return "REGULAR"
+    },
 
   checkShadow: function checkShadowless(input) {
     if (input.toLowerCase().includes("shadowless")) {
@@ -57,9 +62,8 @@ const checkCard = {
   },
 
   checkPrice: function checkCardPrice(input) {
-    const regex = /(\d+\.[0-9]{2,2})/g;
+    const regex = /\$\d+\,?\d+\.[0-9]{2,2}/g;
     const match = input.match(regex);
-    console.log(match[0], match[1], match[3]);
     return match;
   },
 
@@ -77,17 +81,17 @@ const checkCard = {
         found = true;
       }
     }
-    console.log(pokemonObj);
+    // console.log(pokemonObj);
     return pokemonObj;
   },
 
   testImport: function testTheImport() {
-    console.log("hello");
+    // console.log("hello");
   },
 };
 
-checkCard.checkPrice(
-  "fjd1561.21skfdsafdasfdasa2.13fj4.18dsjfchmaj 4/10 estidfsdfw2.89nrizCCGard"
-);
+// checkCard.checkPrice(
+//   "fjd1561.21skfdsafdasfdasa2.13fj4.18dsjfchmaj 4/10 estidfsdfw2.89nrizCCGard"
+// );
 
 export default checkCard;

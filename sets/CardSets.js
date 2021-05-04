@@ -71,7 +71,7 @@ const CARD_SETS = [
       "id": "base4",
       "name": "Base Set 2",
       "series": "Base",
-      "printedTotal": 130,
+      "printedTotal": 130, 
       "total": 130,
       "legalities": {
         "unlimited": "Legal"
@@ -289,7 +289,7 @@ const CARD_SETS = [
     },
     {
       "id": "ex1",
-      "name": "Ruby & Sapphire",
+      "name": "EX Ruby & Sapphire",
       "series": "EX",
       "printedTotal": 109,
       "total": 109,
@@ -306,7 +306,7 @@ const CARD_SETS = [
     },
     {
       "id": "ex2",
-      "name": "Sandstorm",
+      "name": "EX Sandstorm",
       "series": "EX",
       "printedTotal": 100,
       "total": 100,

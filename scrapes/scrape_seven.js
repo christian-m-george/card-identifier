@@ -1,31 +1,16 @@
-const request = require("request");
-const $ = require("cheerio");
-const cheerio = require("cheerio");
-const pokemon = require('pokemon');
-const checkCard = require('../utils/checkCards')
-
+import request from "request";
+import * as cheerio from "cheerio";
+import createPokeCard from "../utils/betterCardDataStripper.js";
 
 let totalTitleArray = [];
-let totalPriceArray = [];
-let pokeArray = [];
-
-function allPokes() {
-    for(let i = 0; i < pokemon.all().length; i++) {
-        if(pokemon.all()[i]){
-        const pokeObj = {
-            pokemon: pokemon.all()[i],
-            number: i+1
-        }
-        pokeArray.push(pokeObj)};
-    }
-}
-allPokes();
+let totalPokeArray = [];
 
 const getSingleCardsFromDACardWorld = (i) => {
   request(
     `https://www.dacardworld.com/gaming/pokemon-singles?Page=${i}`,
     (error, response, html) => {
       if (!error & (response.statusCode == 200)) {
+        // console.log("this is the index of the search", i);
         const $ = cheerio.load(html);
         const listItem = $(".list-item");
 
@@ -34,32 +19,35 @@ const getSingleCardsFromDACardWorld = (i) => {
         const pricingOutput = listItem.find(".item-pricing-small").text();
 
         const pricingArray = pricingOutput.split(/\n{2,}/);
-        const newPricingArray = [];
+        let newPricingArray = [];
 
         for (let i = 0; i < pricingArray.length; i++) {
           if (pricingArray[i].includes("$")) {
+            // console.log(pricingArray[i])
             newPricingArray.push(pricingArray[i]);
           }
         }
-
+        // console.log(newPricingArray)
         for (let i = 0; i < titleArray.length && i < newPricingArray.length; i++) {
-        //   console.log(titleArray[i], newPricingArray[i], " + ", i);
-        //   totalTitleArray.push(titleArray[i]);
-        //   totalPriceArray.push(newPricingArray[i])
-        const {name, number} = checkCard.checkPokeName(titleArray[i])
+          // console.log(titleArray[i], newPricingArray[i], " + ", i);
 
-          const cardObj = {
-            set: '',
-            pokeName: name,
-            pokeNumber: number,
-            setNumber: '',
-            gradingAgency: checkGradingAgency(titleArray[i]),
-            pokemon: '',
-            suggestedPrice: '',
-            price: '',
-            shadowless: checkShadowless(titleArray[i]),
-            gemMint: checkGemMint(titleArray[i]),
-          };
+
+        //   console.log(newPricingArray[i])
+          let pricingOutput = newPricingArray[i].replace(/\n/, ' ')
+        //   console.log(newPricingArray[i], i)
+
+          let perhapsFinallyAUsefulString = titleArray[i] + ` ${pricingOutput}`;
+
+
+          console.log(perhapsFinallyAUsefulString)
+          totalPokeArray.push(perhapsFinallyAUsefulString);
+
+
+          // console.log(totalTitleArray[i])
+          const pokeCard = createPokeCard(perhapsFinallyAUsefulString)
+          console.log(pokeCard);
+
+
         }
       }
     }
@@ -82,7 +70,7 @@ async function getAllCards() {
 
 async function seeWhatWeGot() {
     await getAllCards()
-    // console.log(totalTitleArray, totalPriceArray)
+    // console.log(totalPokeArray)
 }
 
 seeWhatWeGot()
