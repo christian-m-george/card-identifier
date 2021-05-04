@@ -28,7 +28,7 @@ const getSingleCardsFromDACardWorld = (i) => {
         }
 
         for (let i = 0; i < titleArray.length && i < newPricingArray.length; i++) {
-          console.log(titleArray[i], newPricingArray[i], " + ", i);
+          // console.log(titleArray[i], newPricingArray[i], " + ", i);
           totalTitleArray.push(titleArray[i]);
           totalPriceArray.push(newPricingArray[i])
           const cardObj = {

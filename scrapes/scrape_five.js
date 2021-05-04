@@ -1,7 +1,12 @@
 const request = require("request");
 const $ = require("cheerio");
 const cheerio = require("cheerio");
-require('../utils/checkGradingAgency')
+const pokemon = require('pokemon');
+const checkCard = require('../utils/checkCards')
+
+console.log( {checkCard: {
+  
+}} )
 
 let totalTitleArray = [];
 let totalPriceArray = [];
@@ -45,10 +50,12 @@ const getSingleCardsFromDACardWorld = (i) => {
         //   console.log(titleArray[i], newPricingArray[i], " + ", i);
         //   totalTitleArray.push(titleArray[i]);
         //   totalPriceArray.push(newPricingArray[i])
+        const {name, number} = checkCard.checkPokeName(titleArray[i])
 
           const cardObj = {
             set: '',
-            name: checkPokeName(titleArray[i]),
+            pokeName: name,
+            pokeNumber: number,
             setNumber: '',
             gradingAgency: checkGradingAgency(titleArray[i]),
             pokemon: '',

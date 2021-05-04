@@ -809,3 +809,5 @@ const pokeList = [
 { pokemon: 'Meltan', number: 808 },
 { pokemon: 'Melmetal', number: 809 }
 ]
+
+export default pokeList;

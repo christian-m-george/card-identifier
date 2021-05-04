@@ -7,6 +7,7 @@
     "test": "index.js",
     "dev": "nodemon"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
