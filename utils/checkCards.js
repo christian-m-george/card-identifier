@@ -15,7 +15,7 @@ const checkCard = {
   },
 
   checkSet: function checkCardSet(input) {
-    console.log('------------>', input)
+    // console.log('------------>', input)
     let myResult;
     for (let i = 0; i < CARD_SETS.length; i++) {
       let myInput = input.toLowerCase();

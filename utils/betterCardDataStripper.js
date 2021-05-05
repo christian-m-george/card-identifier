@@ -1,11 +1,11 @@
 import pokemonArray from "./allPokemon.js";
 import checkCard from "./checkCards.js";
 
-const myString = `base unlimited charizard 4/102 bgs 9 (quad + 9.5 centering) $11.42`;
+const myString = `Pokemon Base Set 1st Edition Shadowless Double Colorless Energy 96/102 PSA 9 $249.95 $224.95`;
 
 const createPokeCard = (myString) => {
   const regex = / \d+[\.\-\/]\d+[\\.\/]?\d+? /g;
-  const regex1 = / [0-9][1,0]?($|\s)/;
+  const regex1 = / [0-9][1,0]?\.?\d{0,1}?($|\s)/;
   const regex2 = /[pcbPCB][sgSG][acsACS]/;
   const regex3 = /^[pP][oO][kK][eE][mM][oO][nN]/;
   const regex4 = /\([\w\W]+\)/g;
@@ -21,13 +21,23 @@ const createPokeCard = (myString) => {
 
   let shortenedString;
   if (leadingPoke) {
-    shortenedString = myString.replace(/^[pP][oO][kK][eE][mM][oO][nN] /, "");
+    shortenedString = myString
+      .trim()
+      .replace(/^[pP][oO][kK][eE][mM][oO][nN] /, "")
+      .toLowerCase()
+      .replace("base set", "base")
+      .replace("base 2", "base set 2")
+      .replace(/set of \d+/, "");
+  } else {
+    shortenedString = myString
+      .trim()
+      .toLowerCase()
+      .replace("base set", "base")
+      .replace("base 2", "base set 2")
+      .replace(/set of \d+/, "");
   }
-  shortenedString = myString
-    .trim()
-    .toLowerCase()
-    .replace("base set", "base")
-    .replace("base 2", "base set 2");
+
+  // console.log(shortenedString, "how did we do on the replace");
 
   let otherInfo;
   if (isOtherInfo) {
@@ -35,7 +45,7 @@ const createPokeCard = (myString) => {
     shortenedString = shortenedString.replace(regex4, " ");
   }
 
-  console.log(otherInfo, "<----- lookin for dis now homie");
+  // console.log(otherInfo, "<----- lookin for dis now homie");
 
   let prices = checkCard.checkPrice(shortenedString);
   for (let i = 0; i < prices.length; i++) {
@@ -49,15 +59,20 @@ const createPokeCard = (myString) => {
     .replace(/ \d+[\.\-\/]\d+[\\.\/]?\d+/g, "");
 
   const isRating = regex1.test(shortenedString);
-  const rating = isRating ? regex1.exec(shortenedString) : "unrated or set";
+  const rating = isRating ? regex1.exec(shortenedString) : "UNRATED OR SET";
 
-  if (rating !== "unrated or set") {
-    shortenedString = shortenedString.replace(/ [0-9][1,0]?($|\s)/, "");
+  if (rating !== "UNRATED OR SET") {
+    shortenedString = shortenedString.replace(regex1, " ");
   }
 
-  // console.log(shortenedString);
+  // console.log(shortenedString, "before agency replace", agency, agency[0]);
+  agency.includes("UNRATED")
+    ? null
+    : (shortenedString = shortenedString
+        .toLowerCase()
+        .replace(/[pcbPCB][sgSG][acsACS]/, " "));
 
-  shortenedString = shortenedString.replace(agency[0].toLowerCase(), "");
+  // console.log(shortenedString, "before agency replace");
 
   let found = false;
   for (let i = 0; i < pokemonArray.length && !found; i++) {
@@ -68,14 +83,19 @@ const createPokeCard = (myString) => {
     }
   }
 
+  // console.log(
+  //   shortenedString,
+  //   "for reference kldjfklasjdlkfjasdlkfjhkasdjflk;asdjlkfas"
+  // );
+
   const pokeCard = {
     setNumber: cardSetNumber ? cardSetNumber[0].trim() : "IS COLLECTION",
     setName: pokeSetName.toUpperCase(),
     cardTitle: "",
     pokemonName: pokemonName ? pokemonName.toUpperCase() : "COLLECTION OR SET",
     dexNumber: pokemonName ? natDexNum : "COLLECTION OR SET",
-    rating: rating.includes("unrated") ? rating : rating[0].trim(),
-    agency: agency.length > 1 ? agency : agency[0].toUpperCase(),
+    rating: rating.includes("UNRATED") ? rating : rating[0].trim(),
+    agency: agency.includes("UNRATED") ? agency[0].toUpperCase() : agency[0],
     firstEdition: firstEdition,
     shadowless: checkCard.checkShadow(shortenedString),
     condition: checkCard.checkMint(shortenedString),
@@ -94,28 +114,23 @@ const createPokeCard = (myString) => {
       .replace("near mint", "")
       .replace(" gm ", " ")
       .replace(" nm ", " ")
-      .replace("(gm) ", "")
+      .replace("(gm)", "")
       .replace("(nm)", "");
   }
 
-  if (
-    shortenedString.includes("first edition") ||
-    shortenedString.includes("1st edition")
-  ) {
-    firstEdition = true;
-    shortenedString = shortenedString
-      .replace("1st edition", "")
-      .replace("first edition", "");
+  const regex5 = /[1f](ir)?st edition/g;
+  const isFirstEdition = regex5.test(shortenedString);
+  if (isFirstEdition) {
+    shortenedString = shortenedString.replace(/[1f](ir)?st edition/g, " ");
   }
+  pokeCard.firstEdition = isFirstEdition;
 
-  // console.log(newString8, 'this is 8 sting')
   pokeCard.cardTitle = shortenedString
     .trim()
     .replace(/\s+/g, " ")
-    // .replace(/ \d+[\.\-\/]\d+[\\.\/]?\d+/g, "")
     .toUpperCase();
 
-  console.log(pokeCard);
+  // console.log(pokeCard);
   return pokeCard;
 };
 

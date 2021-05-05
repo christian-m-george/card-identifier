@@ -39,7 +39,7 @@ const getSingleCardsFromDACardWorld = (i) => {
           let perhapsFinallyAUsefulString = titleArray[i] + ` ${pricingOutput}`;
 
 
-          console.log(perhapsFinallyAUsefulString)
+          // console.log(perhapsFinallyAUsefulString)
           totalPokeArray.push(perhapsFinallyAUsefulString);
 
 
@@ -58,7 +58,7 @@ const getSingleCardsFromDACardWorld = (i) => {
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
 async function getAllCards() {
-  for (let i = 1; i < 6; i++) {
+  for (let i = 1; i < 2; i++) {
     if (i > 1) {
       await timer(6000);
       getSingleCardsFromDACardWorld(i);
