@@ -1,7 +1,7 @@
 import pokemonArray from "./allPokemon.js";
 import checkCard from "./checkCards.js";
 
-const myString = `Pokemon Base Set 1st Edition Shadowless Double Colorless Energy 96/102 PSA 9 $249.95 $224.95`;
+// const myString = `Pokemon Base Set 1st Edition Shadowless Double Colorless Energy 96/102 PSA 9 $249.95 $224.95`;
 
 const createPokeCard = (myString) => {
   const regex = / \d+[\.\-\/]\d+[\\.\/]?\d+? /g;
@@ -37,15 +37,11 @@ const createPokeCard = (myString) => {
       .replace(/set of \d+/, "");
   }
 
-  // console.log(shortenedString, "how did we do on the replace");
-
   let otherInfo;
   if (isOtherInfo) {
     otherInfo = shortenedString.match(regex4);
     shortenedString = shortenedString.replace(regex4, " ");
   }
-
-  // console.log(otherInfo, "<----- lookin for dis now homie");
 
   let prices = checkCard.checkPrice(shortenedString);
   for (let i = 0; i < prices.length; i++) {
@@ -65,14 +61,11 @@ const createPokeCard = (myString) => {
     shortenedString = shortenedString.replace(regex1, " ");
   }
 
-  // console.log(shortenedString, "before agency replace", agency, agency[0]);
   agency.includes("UNRATED")
     ? null
     : (shortenedString = shortenedString
         .toLowerCase()
         .replace(/[pcbPCB][sgSG][acsACS]/, " "));
-
-  // console.log(shortenedString, "before agency replace");
 
   let found = false;
   for (let i = 0; i < pokemonArray.length && !found; i++) {
@@ -83,11 +76,6 @@ const createPokeCard = (myString) => {
     }
   }
 
-  // console.log(
-  //   shortenedString,
-  //   "for reference kldjfklasjdlkfjasdlkfjhkasdjflk;asdjlkfas"
-  // );
-
   const pokeCard = {
     setNumber: cardSetNumber ? cardSetNumber[0].trim() : "IS COLLECTION",
     setName: pokeSetName.toUpperCase(),
@@ -95,7 +83,7 @@ const createPokeCard = (myString) => {
     pokemonName: pokemonName ? pokemonName.toUpperCase() : "COLLECTION OR SET",
     dexNumber: pokemonName ? natDexNum : "COLLECTION OR SET",
     rating: rating.includes("UNRATED") ? rating : rating[0].trim(),
-    agency: agency.includes("UNRATED") ? agency[0].toUpperCase() : agency[0],
+    agency: agency.includes("UNRATED") ? agency : agency[0],
     firstEdition: firstEdition,
     shadowless: checkCard.checkShadow(shortenedString),
     condition: checkCard.checkMint(shortenedString),
@@ -129,6 +117,11 @@ const createPokeCard = (myString) => {
     .trim()
     .replace(/\s+/g, " ")
     .toUpperCase();
+
+  if(pokeCard.cardTitle.includes('FRLG')) {
+    pokeCard.setName = "FireRed & LeafGreen";
+    pokeCard.cardTitle = pokeCard.cardTitle.replace("EX FIRERED LEAFGREEN FRLG ", "")
+  }
 
   // console.log(pokeCard);
   return pokeCard;
